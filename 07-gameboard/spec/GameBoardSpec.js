@@ -31,11 +31,33 @@
   prototipo 06.
 
 
-  Especificación: GameBoard debe
+  Especificación: GameBoard debe */
 
-  - mantener una colección a la que se pueden añadir y de la que se
+describe("Clase GameBoard", function(){
+
+   var canvas, ctx;
+
+     beforeEach(function(){
+	        loadFixtures('index.html');
+
+	        canvas = $('#game')[0];
+	        expect(canvas).toExist();
+
+	        ctx = canvas.getContext('2d');
+	        expect(ctx).toBeDefined();
+
+       });
+
+
+
+
+/*- mantener una colección a la que se pueden añadir y de la que se
     pueden eliminar sprites como nave enemiga, misil, nave del
     jugador, explosión, etc.
+
+
+
+
 
   - interacción con Game: cuando Game llame a los métodos step() y
     draw() de un GameBoard que haya sido añadido como un board a Game,
@@ -56,3 +78,4 @@
     colisionado con objetos de cierto tipo, no con todos los objetos.
 
 */
+});
