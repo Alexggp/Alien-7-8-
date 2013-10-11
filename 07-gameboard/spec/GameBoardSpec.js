@@ -54,12 +54,27 @@ describe("Clase GameBoard", function(){
 /*- mantener una colección a la que se pueden añadir y de la que se
     pueden eliminar sprites como nave enemiga, misil, nave del
     jugador, explosión, etc.
+*/
+
+   it("Coleccion de objetos", function(){
+ 
+    var board = new GameBoard();  
+    board.add(new PlayerShip());
+    expect(board.objects.length).toEqual(1); 
+    
+    board.resetRemoved();
+    board.remove(board.objects[0]);
+    expect(board.removed.length).toEqual(1);  
+    
+    board.finalizeRemoved();
+    expect(board.objects.length).toEqual(0);  
+
+   });
 
 
 
 
-
-  - interacción con Game: cuando Game llame a los métodos step() y
+/* - interacción con Game: cuando Game llame a los métodos step() y
     draw() de un GameBoard que haya sido añadido como un board a Game,
     GameBoard debe ocuparse de que se ejecuten los métodos step() y
     draw() de todos los objetos que contenga
