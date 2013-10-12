@@ -34,21 +34,17 @@
   Especificación: GameBoard debe */
 
 describe("Clase GameBoard", function(){
+   
+    beforeEach(function(){
+	    loadFixtures('index.html');
 
-   var canvas, ctx;
+	    canvas = $('#game')[0];
+	    expect(canvas).toExist();
 
-     beforeEach(function(){
-	        loadFixtures('index.html');
+	    ctx = canvas.getContext('2d');
+	    expect(ctx).toBeDefined();
 
-	        canvas = $('#game')[0];
-	        expect(canvas).toExist();
-
-	        ctx = canvas.getContext('2d');
-	        expect(ctx).toBeDefined();
-
-       });
-
-
+    });
 
 
 /*- mantener una colección a la que se pueden añadir y de la que se
@@ -60,14 +56,15 @@ describe("Clase GameBoard", function(){
  
     var board = new GameBoard();  
     board.add(new PlayerShip());
-    expect(board.objects.length).toEqual(1); 
+    board.add(new PlayerShip());
+    expect(board.objects.length).toEqual(2); 
     
     board.resetRemoved();
     board.remove(board.objects[0]);
     expect(board.removed.length).toEqual(1);  
     
     board.finalizeRemoved();
-    expect(board.objects.length).toEqual(0);  
+    expect(board.objects.length).toEqual(1);  
 
    });
 
@@ -78,8 +75,33 @@ describe("Clase GameBoard", function(){
     draw() de un GameBoard que haya sido añadido como un board a Game,
     GameBoard debe ocuparse de que se ejecuten los métodos step() y
     draw() de todos los objetos que contenga
+*/    
+      it("interacción con Game", function(){
+ 
+        
+        var board = new GameBoard();  
+        board.add(new PlayerShip());
+        board.add(new PlayerShip());
+        expect(board.objects.length).toEqual(2); 
+        
+        spyOn(board.objects[1], "step");
+        spyOn(board.objects[0], "step");
+        spyOn(board.objects[1], "draw");
+        spyOn(board.objects[0], "draw");
+        
+        var dt = 1;
+        board.step(dt);
+        expect(board.objects[0].step).toHaveBeenCalled();
+ 	      expect(board.objects[1].step).toHaveBeenCalled();
+ 	      
+ 	      board.draw(ctx);
+ 	      expect(board.objects[1].draw).toHaveBeenCalled();
+ 	      expect(board.objects[0].draw).toHaveBeenCalled();
+	     
+    });   
+    
 
-  - debe ofrecer la posibilidad de detectar la colisión entre
+/*- debe ofrecer la posibilidad de detectar la colisión entre
     objetos. Un objeto sprite almacenado en GameBoard debe poder
     detectar si ha colisionado con otro objeto del mismo
     GameBoard. Los misiles disparados por la nave del jugador deberán
