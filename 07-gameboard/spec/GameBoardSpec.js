@@ -54,15 +54,18 @@ describe("Clase GameBoard", function(){
 
    it("Coleccion de objetos", function(){
  
+    //Creamos objetos y comprobamos que se añaden
     var board = new GameBoard();  
-    board.add(new PlayerShip());
+    board.add(new PlayerShip()); 
     board.add(new PlayerShip());
     expect(board.objects.length).toEqual(2); 
     
+    //Comprobamos que se une uno de los objetos a la lista para ser eliminados
     board.resetRemoved();
     board.remove(board.objects[0]);
     expect(board.removed.length).toEqual(1);  
     
+    //Comprobamos que el objeto deseado se ha borrado y el otro permanece en la lista
     board.finalizeRemoved();
     expect(board.objects.length).toEqual(1);  
 
@@ -78,25 +81,28 @@ describe("Clase GameBoard", function(){
 */    
       it("interacción con Game", function(){
  
-        
+        //Creamos dos objetos en la lista
         var board = new GameBoard();  
         board.add(new PlayerShip());
         board.add(new PlayerShip());
         expect(board.objects.length).toEqual(2); 
         
+        //Programamos los spys para cada función de cada objeto
         spyOn(board.objects[1], "step");
         spyOn(board.objects[0], "step");
         spyOn(board.objects[1], "draw");
         spyOn(board.objects[0], "draw");
         
+        //Comprobamos que al llamar la función en GameBoard, ésta se ocupa  
+        //de ejecutar los metodos en cada uno de los objetos de la lista
         var dt = 1;
         board.step(dt);
         expect(board.objects[0].step).toHaveBeenCalled();
- 	      expect(board.objects[1].step).toHaveBeenCalled();
+        expect(board.objects[1].step).toHaveBeenCalled();
  	      
- 	      board.draw(ctx);
- 	      expect(board.objects[1].draw).toHaveBeenCalled();
- 	      expect(board.objects[0].draw).toHaveBeenCalled();
+        board.draw(ctx);
+        expect(board.objects[1].draw).toHaveBeenCalled();
+        expect(board.objects[0].draw).toHaveBeenCalled();
 	     
     });   
     
@@ -115,4 +121,43 @@ describe("Clase GameBoard", function(){
     colisionado con objetos de cierto tipo, no con todos los objetos.
 
 */
+
+
+    it("detectar colision", function(){
+    var board = new GameBoard();
+    
+    //Creamos dos objetos con coordenadas específicas,
+    //para empezar no se tocan
+    
+    var naveJugador = {x:1,y:1,w:4,h:4};
+    var naveEnemiga = {x:6,y:6,w:4,h:4};
+    
+    board.add(naveJugador);
+    board.add(naveEnemiga);
+    
+    //Comprobamos que no hay overlap
+    expect(board.overlap(naveJugador,naveEnemiga)).toBe(false);
+    
+    //Añadimos un nuevo objeto que sí se toque con nave Jugador
+    var naveEnemiga2 = {x:1,y:3,w:4,h:4};
+    board.add(naveEnemiga2);
+    
+    //Ahora sí existe overlap
+    expect(board.overlap(naveJugador,naveEnemiga2)).toBe(true);
+    
+    //Comprobamos que detecta la nave que es
+    
+    expect(board.collide(naveJugador)).toBe(naveEnemiga2);
+    
+    
+    
+    
+    }); 
+
+
+
+
+
+
+
 });
