@@ -7,15 +7,37 @@
 
   El arma tendrá un tiempo de recarga de 0,25s, no pudiéndose enviar
   dos nuevos misiles antes de que pasen 0,25s desde que se enviaron
-  los anteriores
+  los anteriores 
+*/
 
+describe("Clase PlayerMissile", function(){
+   
+    beforeEach(function(){
+	    loadFixtures('index.html');
 
+	    canvas = $('#game')[0];
+	    expect(canvas).toExist();
 
+	    ctx = canvas.getContext('2d');
+	    expect(ctx).toBeDefined();
+
+    });
+    
+/*
   Especificación:
 
   - Hay que añadir a la variable sprites la especificación del sprite
     missile
+*/
+ it("sprite missile", function(){
+    Game = {};
+    expect(sprites["missile"]).toBeDefined(); 
+	});
 
+
+
+
+/*
   - Cada vez que el usuario presione la tecla de espacio se añadirán
     misiles al tablero de juego en la posición en la que esté la nave
     del usuario. En el código de la clase PlayerSip es donde tienen
@@ -27,3 +49,4 @@
     la clase en el prototipo
 
 */
+ });
