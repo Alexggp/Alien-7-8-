@@ -10,6 +10,7 @@
   los anteriores 
 */
 
+
 describe("Clase PlayerMissile", function(){
    
     beforeEach(function(){
@@ -23,25 +24,41 @@ describe("Clase PlayerMissile", function(){
 
     });
     
+    
 /*
   Especificación:
 
   - Hay que añadir a la variable sprites la especificación del sprite
     missile
 */
+
+
+
+
  it("sprite missile", function(){
     Game = {};
     expect(sprites["missile"]).toBeDefined(); 
     expect (PlayerMissile).toBeDefined();
 	});
 
+
+
+
 /*
   - Cada vez que el usuario presione la tecla de espacio se añadirán
     misiles al tablero de juego en la posición en la que esté la nave
     del usuario. En el código de la clase PlayerSip es donde tienen
     que añadirse los misiles
+    
+  - La clase PlayerMissile es la que implementa los misiles. Es
+    importante que la creación de los misiles sea poco costosa pues va
+    a haber muchos disparos, para lo cual se declararán los métodos de
+    la clase en el prototipo
 */
-  it("Disparar",function(){
+
+
+
+  it("disparar",function(){
     Game = {width: 320, height: 480, keys: {'fire': false}};
    
     SpriteSheet = { 
@@ -75,12 +92,44 @@ describe("Clase PlayerMissile", function(){
     expect(board.objects[2].y).toBe(board.objects[0].y+board.objects[0].h/2- board.objects[2].h);
   });
 
+  it("un disparo por pulsación",function(){
+  
+    Game = {width: 320, height: 480, keys: {'fire': false}};
+   
+    SpriteSheet = { 
+      map : {missile: { sx: 0, sy: 30, w: 2, h: 10, frames: 1 },
+                ship: { sx: 0, sy: 0, w: 37, h: 42, frames: 1 }},
+    };
 
-/*
-  - La clase PlayerMissile es la que implementa los misiles. Es
-    importante que la creación de los misiles sea poco costosa pues va
-    a haber muchos disparos, para lo cual se declararán los métodos de
-    la clase en el prototipo
+    var board = new GameBoard();
+    board.add(new PlayerShip());  
+   
+    //Comprobamos que antes de disparar solo existe la nave en la lista 
+    //de objetos. 
+    expect(board.objects.length).toBe(1);
+  
+    Game = {keys: {'fire': true}};  
+    
+    //Comprobamos que si dejamos 'fire' pulsado no se añaden más que una
+    //pareja de misiles. dt>realoadTime   
+    var dt = 0.1;
+    board.step(dt); 
+    board.step(dt);   
+    board.step(dt); 
+    board.step(dt);   
+    expect(board.objects.length).toBe(3);
+    
+    //Sin embargo si soltamos 'fire' y lo volvemos a pulsar se añade otra
+    //pareja de misiles más. 
+    Game = {keys: {'fire': false}};
+    board.step(dt);
+    Game = {keys: {'fire': true}};
+   board.step(dt);
+    expect(board.objects.length).toBe(5);
+  
+  
+  });
 
-*/
+
+
  });
