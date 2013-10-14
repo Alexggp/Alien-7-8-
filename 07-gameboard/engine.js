@@ -217,7 +217,9 @@ var GameBoard = function() {
     };
   */
   this.iterate = function(funcName) {
-    _.invoke(this.objects,funcName, [*arguments]) 
+    var args = Array.prototype.slice.call(arguments,1);
+    _.each(this.objects,function(obj){obj[funcName].apply(obj,args)});
+   // _.invoke(this.objects,funcName,args);  --> no se como introducir argumentos
   };
 
     // Devuelve el primer objeto de objects para el que func es true
@@ -229,7 +231,7 @@ var GameBoard = function() {
     };
   */
   this.detect = function(func) {
-    return ( _.find(this.objects,function(obj){return func.call(obj))});
+    return ( _.find(this.objects,function(obj){return func.call(obj)}));
   };
   
   
